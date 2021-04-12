@@ -241,31 +241,53 @@ console.log("---- beep ----");
     console.log("added element", el);
   }
 
-  const observer = new MutationObserver((mutationsList, observer) => {
+  const observer = new MutationObserver(async (mutationsList, observer) => {
     try {
       for (const mutation of mutationsList) {
         if (mutation.type === "childList") {
-          mutation.addedNodes.forEach(async (node) => {
+          for (let node of mutation.addedNodes) {
             if (await shouldIgnore(node)) {
               return;
             }
             try {
-              tryAddAltTextFor(node);
+              await new Promise((resolve, reject) => {
+                try {
+                  tryAddAltTextFor(node);
+                  resolve();
+                } catch (e) {
+                  reject(e);
+                }
+              });
             } catch (e) {
               console.error("tryAddAltTextFor fails:", e);
             }
-          });
 
-          // // remove alt-texts when their associated images are removed
-          // mutation.removedNodes.forEach(node => {
-          //   if (shouldIgnore(node)) {
-          //     return;
-          //   }
-          //   const
-          //     associationId = node.getAttribute("data-associated-to-alt"),
-          //     associated = Array.from(document.querySelectorAll(`[data-associated-to-image='${ associationId }']`));
-          //   associated.forEach(el => el.remove());
-          // });
+          }
+
+          // remove alt-texts when their associated images are removed
+          for (let node of mutation.removedNodes) {
+            if (await shouldIgnore(node)) {
+              return;
+            }
+            const
+              associationId = node.getAttribute("data-associated-to-alt"),
+              associated = Array.from(document.querySelectorAll(`[data-associated-to-image='${ associationId }']`));
+            for (let anode of associated) {
+              try {
+                await new Promise((resolve, reject) => {
+                  try {
+                    anode.remove();
+                    resolve();
+                  } catch (e) {
+                    reject(e);
+                  }
+                });
+              } catch (e) {
+                console.error(`attempt to remove obsolete node fails:`, e);
+              }
+            }
+            associated.forEach(el => el.remove());
+          };
         }
       }
     } catch (e) {
