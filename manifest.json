@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "TwitterAltText",
+  "version": "1.0",
+  "description": "Surfaces alt-text for images on Twitter",
+  "icons": {
+    "48": "icon-48.png",
+    "96": "icon-96.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://twitter.com/*"
+      ],
+      "js": [
+        "main.js"
+      ]
+    }
+  ]
+}
