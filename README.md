@@ -15,3 +15,7 @@ Web Extension to show alt-text for images inline in Twitter
   alt-text. For true bonus points, it should OCR the image & pass off to
   any free AI image description service to get the user started. High and
   lofty goals indeed.
+  
+## TODO
+- fix alts when there are two shared images
+  - shared images are squished to the left and alt-texts all pile up on the right
