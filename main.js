@@ -238,7 +238,7 @@ console.log("---- beep ----");
     el.setAttribute("data-associated-to-image", seenImages);
     node.setAttribute("data-associated-to-alt", seenImages);
     container.appendChild(el);
-    log("added element", el);
+    console.log("added element", el);
   }
 
   const observer = new MutationObserver((mutationsList, observer) => {
