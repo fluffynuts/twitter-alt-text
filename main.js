@@ -123,6 +123,9 @@
           if (node.tagName !== "IMG") {
             return;
           }
+          // TODO: respond to image deletes (eg thumbnails for videos)
+          // TODO: tie alt text elements to their corresponding images so we
+          //       can remove them too
           try {
             tryAddAltTextFor(node);
           } catch (e) {
