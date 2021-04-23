@@ -238,6 +238,27 @@ console.log("---- beep ----");
     el.setAttribute("data-associated-to-image", seenImages);
     node.setAttribute("data-associated-to-alt", seenImages);
     container.appendChild(el);
+
+    console.log("pass-through click events");
+    let anchor = node.parentElement;
+    while (!!anchor && anchor.tagName !== "A") {
+      console.log("looking for anchor", anchor);
+      anchor = anchor.parentElement;
+    }
+    el.addEventListener("click", ev => {
+      if (!anchor) {
+        console.error("no anchor found");
+        return;
+      }
+      console.log("attempting to click the anchor");
+      const newEv = new MouseEvent("click", {
+        view: window,
+        bubbles: true,
+        cancelable: true
+      });
+      anchor.dispatchEvent(newEv);
+    });
+
     console.log("added element", el);
   }
 
